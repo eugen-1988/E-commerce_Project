@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
 import Title from "../components/Title";
-import ProductItem from "../components/ProductItem";
+import ProductItem from "../components/ProductLitem";
 
 const Collection = () => {
   const { products, search, showSearch } = useContext(ShopContext);
@@ -93,55 +93,28 @@ const Collection = () => {
               <input
                 className="w-6 h-4"
                 type="checkbox"
-                value={"Men"}
+                value={"Text Design"}
                 onChange={toggleCategory}
               />
-              Men
+              Text Design
             </p>
             <p className="flex gap-2">
               <input
                 className="w-6 h-4"
                 type="checkbox"
-                value={"Women"}
+                value={"Pop Art"}
                 onChange={toggleCategory}
               />
-              Women
+              Pop Art
             </p>
             <p className="flex gap-2">
               <input
                 className="w-6 h-4"
                 type="checkbox"
-                value={"Kids"}
+                value={"Text with Logo"}
                 onChange={toggleCategory}
               />
-              Kids
-            </p>
-            <p className="flex gap-2">
-              <input
-                className="w-6 h-4"
-                type="checkbox"
-                value={"Topwear"}
-                onChange={toggleCategory}
-              />
-              Topwear
-            </p>
-            <p className="flex gap-2">
-              <input
-                className="w-6 h-4"
-                type="checkbox"
-                value={"Bottomwear"}
-                onChange={toggleCategory}
-              />
-              Bottomwear
-            </p>
-            <p className="flex gap-2">
-              <input
-                className="w-6 h-4"
-                type="checkbox"
-                value={"Winterwear"}
-                onChange={toggleCategory}
-              />
-              Winterwear
+              Text with Logo
             </p>
           </div>
         </div>
