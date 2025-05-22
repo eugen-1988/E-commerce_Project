@@ -10,6 +10,7 @@ const Product = () => {
   const [productData, setProductData] = useState(false);
   const [image, setImage] = useState("");
   const [size, setSize] = useState("");
+  const [gender, setGender] = useState("");
 
   const fetchProductData = async () => {
     products.map((item) => {
@@ -23,7 +24,11 @@ const Product = () => {
 
   useEffect(() => {
     fetchProductData();
-  }, [productId]);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [productId, products]);
 
   return productData ? (
     <div className="border-t-2 pt-10 transition-opacity ease-in duration-500 opacity-100">
@@ -80,12 +85,46 @@ const Product = () => {
               ))}
             </div>
           </div>
+
+          {/* -------- Select Gender -------- */}
+          <div className="flex flex-col gap-4 my-8">
+            <p>Select Gender</p>
+            <div className="flex gap-10">
+              {/* Female option */}
+              <div className="flex flex-col items-center gap-2">
+                <img
+                  src={assets.women_img}
+                  onClick={() => setGender("Women")}
+                  className={`w-24 h-24 object-cover border-2 cursor-pointer rounded-md ${
+                    gender === "Women" ? "border-orange-500" : "border-gray-300"
+                  }`}
+                  alt="Women's Jacket"
+                />
+                <span className="text-sm text-gray-600">Women</span>
+              </div>
+
+              {/* Male option */}
+              <div className="flex flex-col items-center gap-2">
+                <img
+                  src={assets.man_img}
+                  onClick={() => setGender("Men")}
+                  className={`w-24 h-24 object-cover border-2 cursor-pointer rounded-md ${
+                    gender === "Men" ? "border-orange-500" : "border-gray-300"
+                  }`}
+                  alt="Men's Jacket"
+                />
+                <span className="text-sm text-gray-600">Men</span>
+              </div>
+            </div>
+          </div>
+
           <button
             onClick={() => addToCart(productData._id, size)}
-            className="bg-orange-500 rounded-md text-white px-8 py-3 text-sm active:bg-orange-400 "
+            className="bg-orange-500 rounded-md text-white px-8 py-3 text-sm active:bg-orange-400"
           >
             ADD TO CART
           </button>
+
           <hr className="mt-8 sm:w-4/5 border-gray-300 border-t-2" />
           <div className="text-sm text-gray-500 mt-5 flex flex-col gap-1">
             <p>100% Original product.</p>
@@ -94,7 +133,8 @@ const Product = () => {
           </div>
         </div>
       </div>
-      {/* -------Description Review Section----------*/}
+
+      {/* -------Description Review Section---------- */}
       <div className="mt-20">
         <div className="flex">
           <b className="border px-5 py-3 text-sm">Description</b>
@@ -118,8 +158,8 @@ const Product = () => {
           </p>
         </div>
       </div>
-      {/* -------Display related products----------*/}
 
+      {/* -------Display related products---------- */}
       <RelatedProducts category={productData.category} />
     </div>
   ) : (

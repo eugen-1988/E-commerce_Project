@@ -16,7 +16,7 @@ const portraitImages = [
   assets.p_10,
 ];
 
-const BestSeller = () => {
+const Portrait = () => {
   return (
     <div className="my-10">
       <div className="text-center text-3xl py-8">
@@ -58,4 +58,4 @@ const BestSeller = () => {
   );
 };
 
-export default BestSeller;
+export default Portrait;
