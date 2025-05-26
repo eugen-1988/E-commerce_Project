@@ -11,27 +11,43 @@ const ShopContextProvider = (props) => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
-  const [cartItems, setCartItems] = useState({});
+
+  const [cartItems, setCartItems] = useState(() => {
+    const local = localStorage.getItem("guest_cart");
+    if (local) {
+      try {
+        return JSON.parse(local);
+      } catch (e) {
+        console.error("Invalid guest_cart in localStorage");
+      }
+    }
+    return {};
+  });
+
   const [products, setProducts] = useState([]);
   const [token, setToken] = useState("");
   const navigate = useNavigate();
 
-  const addToCart = async (itemId, size) => {
+  const addToCart = async (itemId, size, gender) => {
     if (!size) {
       toast.error("Select Product Size");
+      return;
+    }
+    if (!gender) {
+      toast.error("Select Gender");
       return;
     }
 
     let cartData = structuredClone(cartItems);
     if (cartData[itemId]) {
-      if (cartData[itemId][size]) {
-        cartData[itemId][size] += 1;
+      if (cartData[itemId][`${size}_${gender}`]) {
+        cartData[itemId][`${size}_${gender}`] += 1;
       } else {
-        cartData[itemId][size] = 1;
+        cartData[itemId][`${size}_${gender}`] = 1;
       }
     } else {
       cartData[itemId] = {};
-      cartData[itemId][size] = 1;
+      cartData[itemId][`${size}_${gender}`] = 1;
     }
 
     setCartItems(cartData);
@@ -40,7 +56,7 @@ const ShopContextProvider = (props) => {
       try {
         await axios.post(
           backendUrl + "/api/cart/add",
-          { itemId, size },
+          { itemId, size, gender },
           { headers: { token } }
         );
       } catch (error) {
@@ -66,18 +82,21 @@ const ShopContextProvider = (props) => {
     return totalCount;
   };
 
-  const updateQuantity = async (itemId, size, quantity) => {
+  const updateQuantity = async (itemId, sizeGender, quantity) => {
     let cartData = structuredClone(cartItems);
-    cartData[itemId][size] = quantity;
+    cartData[itemId][sizeGender] = quantity;
     setCartItems(cartData);
 
     if (token) {
       try {
+        // Split sizeGender back to size and gender
+        const [size, gender] = sizeGender.split("_");
         await axios.post(
           backendUrl + "/api/cart/update",
           {
             itemId,
             size,
+            gender,
             quantity,
           },
           { headers: { token } }
@@ -144,6 +163,12 @@ const ShopContextProvider = (props) => {
       getUserCart(localStorage.getItem("token"));
     }
   }, []);
+
+  useEffect(() => {
+    if (!token) {
+      localStorage.setItem("guest_cart", JSON.stringify(cartItems));
+    }
+  }, [cartItems, token]);
 
   const value = {
     products,

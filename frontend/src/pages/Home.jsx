@@ -6,6 +6,7 @@ import HighLights from "../components/HighLights";
 import OurPolicy from "../components/OurPolicy";
 import NewsletterBox from "../components/NewsletterBox";
 import Testimonials from "../components/Testimonials";
+import Trend from "../components/Trend";
 
 const Home = () => {
   return (
@@ -13,6 +14,7 @@ const Home = () => {
       <Hero />
       <HighLights />
       <LatestCollection />
+      <Trend />
       <BestSeller />
       <Testimonials />
       <OurPolicy />

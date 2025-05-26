@@ -3,20 +3,22 @@ import userModel from "../models/userModel.js";
 //add products to user cart
 const addToCart = async (req, res) => {
   try {
-    const { userId, itemId, size } = req.body;
+    const { userId, itemId, size, gender } = req.body;
 
     const userData = await userModel.findById(userId);
     let cartData = await userData.cartData;
 
+    const sizeGenderKey = `${size}_${gender}`;
+
     if (cartData[itemId]) {
-      if (cartData[itemId][size]) {
-        cartData[itemId][size] += 1;
+      if (cartData[itemId][sizeGenderKey]) {
+        cartData[itemId][sizeGenderKey] += 1;
       } else {
-        cartData[itemId][size] = 1;
+        cartData[itemId][sizeGenderKey] = 1;
       }
     } else {
       cartData[itemId] = {};
-      cartData[itemId][size] = 1;
+      cartData[itemId][sizeGenderKey] = 1;
     }
     await userModel.findByIdAndUpdate(userId, { cartData });
 
@@ -30,12 +32,13 @@ const addToCart = async (req, res) => {
 //update  user cart
 const updateCart = async (req, res) => {
   try {
-    const { userId, itemId, size, quantity } = req.body;
+    const { userId, itemId, size, gender, quantity } = req.body;
 
     const userData = await userModel.findById(userId);
     let cartData = await userData.cartData;
 
-    cartData[itemId][size] = quantity;
+    const sizeGenderKey = `${size}_${gender}`;
+    cartData[itemId][sizeGenderKey] = quantity;
 
     await userModel.findByIdAndUpdate(userId, { cartData });
 

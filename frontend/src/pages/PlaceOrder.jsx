@@ -7,7 +7,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const PlaceOrder = () => {
-  const [method, setMethod] = useState("COD");
+  const [method, setMethod] = useState("stripe");
   const {
     navigate,
     backendUrl,
@@ -41,14 +41,16 @@ const PlaceOrder = () => {
     try {
       let orderItems = [];
       for (const items in cartItems) {
-        for (const item in cartItems[items]) {
-          if (cartItems[items][item] > 0) {
+        for (const itemKey in cartItems[items]) {
+          if (cartItems[items][itemKey] > 0) {
+            const [size, gender] = itemKey.split("_");
             const itemInfo = structuredClone(
               products.find((product) => product._id === items)
             );
             if (itemInfo) {
-              itemInfo.size = item;
-              itemInfo.quantity = cartItems[items][item];
+              itemInfo.size = size;
+              itemInfo.gender = gender;
+              itemInfo.quantity = cartItems[items][itemKey];
               orderItems.push(itemInfo);
             }
           }
@@ -74,6 +76,22 @@ const PlaceOrder = () => {
             toast.error(response.data.message);
           }
           break;
+
+        case "stripe":
+          const responseStripe = await axios.post(
+            backendUrl + "/api/order/stripe",
+            orderData,
+            { headers: { token } }
+          );
+          if (responseStripe.data.success) {
+            const { session_url } = responseStripe.data;
+            window.location.replace(session_url);
+          } else {
+            toast.error(responseStripe.data.message);
+          }
+
+          break;
+
         default:
           break;
       }
@@ -175,7 +193,7 @@ const PlaceOrder = () => {
           onChange={onChangeHandler}
           name="phone"
           value={formData.phone}
-          className="border border-gray-300 bg-pink-50 rounded py-1.5 px-3.5 w-full"
+          className="border border-gray-300 bg-pink-50  rounded py-1.5 px-3.5 w-full"
           type="number"
           placeholder="Phone"
         />

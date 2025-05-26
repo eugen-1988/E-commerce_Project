@@ -96,6 +96,8 @@ import stripe_logo from "./stripe_logo.png";
 import cross_icon from "./cross_icon.png";
 import man_img from "./man_img.jpg";
 import women_img from "./women_img.jpg";
+import trend_img from "./trend_img.jpg";
+
 import p_1 from "./p_1.jpg";
 import p_2 from "./p_2.jpg";
 import p_3 from "./p_3.jpg";
@@ -128,6 +130,7 @@ export const assets = {
   cross_icon,
   women_img,
   man_img,
+  trend_img,
   p_1,
   p_2,
   p_3,

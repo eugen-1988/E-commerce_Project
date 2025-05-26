@@ -1,6 +1,4 @@
-import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { backendUrl, currency } from "../App";
 import { toast } from "react-toastify";
@@ -8,10 +6,10 @@ import { assets } from "../assets/assets";
 
 const Orders = ({ token }) => {
   const [orders, setOrders] = useState([]);
+  const [modalImage, setModalImage] = useState(null);
+
   const fetcAllOrders = async () => {
-    if (!token) {
-      return null;
-    }
+    if (!token) return null;
     try {
       const response = await axios.post(
         backendUrl + "/api/order/list",
@@ -43,7 +41,35 @@ const Orders = ({ token }) => {
       }
     } catch (error) {
       console.log(error);
-      toast.error(response.data.message);
+      toast.error("Failed to update status");
+    }
+  };
+
+  const downloadImage = (url) => {
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = url.split("/").pop();
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const removeOrder = async (orderId) => {
+    try {
+      const response = await axios.post(
+        backendUrl + "/api/order/remove",
+        { orderId },
+        { headers: { token } }
+      );
+      if (response.data.success) {
+        toast.success(response.data.message);
+        await fetcAllOrders();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to remove order");
     }
   };
 
@@ -53,73 +79,126 @@ const Orders = ({ token }) => {
 
   return (
     <div>
-      <h3>Order page</h3>
+      <h3 className="text-xl font-semibold mb-4">Order page</h3>
+
+      {modalImage && (
+        <div
+          onClick={() => setModalImage(null)}
+          className="fixed inset-0 bg-black bg-opacity-75 flex flex-col justify-center items-center z-50 cursor-pointer p-4"
+        >
+          <img
+            src={modalImage}
+            alt="Zoomed"
+            className="max-h-[80vh] max-w-[90vw] rounded shadow-lg"
+            onClick={(e) => e.stopPropagation()}
+          />
+          <button
+            onClick={() => downloadImage(modalImage)}
+            className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Download Image
+          </button>
+          <button
+            onClick={() => setModalImage(null)}
+            className="mt-2 text-white underline"
+          >
+            Close
+          </button>
+        </div>
+      )}
+
       <div>
         {orders.map((order, index) => (
           <div
-            className="grid grid-cols-1 sm:grid-cols-[0.5fr_2fr_1fr] lg:grid-cols-[0.5fr_2fr_1fr_1fr_1fr] gap-3 items-start border-2 border-gray-300 p-5 md:p-8 my-3 text-xs sm:text-sm text-gray-800  "
             key={index}
+            className="border-2 border-gray-300 p-5 md:p-8 my-5 space-y-4 text-xs sm:text-sm text-gray-800"
           >
-            <img src={assets.parcel_icon} alt="" />
-            <div>
-              <div>
-                {order.items.map((item, index) => {
-                  if (index === order.items.length - 1) {
-                    return (
-                      <p className="py-0.5" key={index}>
-                        {item.name} x {item.quantity}
-                        <span> {item.size} </span>
+            {/* Produse + Remove Order */}
+            <div className="flex flex-col md:flex-row md:items-start gap-4">
+              {/* Produse individuale */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 flex-1">
+                {order.items.map((item, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-4 border p-3 rounded shadow-sm bg-gray-50"
+                  >
+                    <img
+                      src={item.image?.[0] || assets.parcel_icon}
+                      alt={item.name}
+                      className="w-20 h-20 object-cover rounded cursor-pointer"
+                      onClick={() => setModalImage(item.image?.[0])}
+                      title="Click to zoom"
+                    />
+                    <div>
+                      <p className="font-semibold">{item.name}</p>
+                      <p>
+                        Size: {item.size} {item.gender && `(${item.gender})`}
                       </p>
-                    );
-                  } else {
-                    return (
-                      <p className="py-0.5" key={index}>
-                        {item.name} x {item.quantity}
-                        <span> {item.size} </span> ,
-                      </p>
-                    );
-                  }
-                })}
+                      <p>Quantity: {item.quantity}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <p className="mt-3 mb-2 font-medium">
-                {order.address.firstName + "" + order.address.lastName}
-              </p>
+
+              {/* Remove Order */}
+              <div
+                className="flex flex-col items-center justify-start cursor-pointer select-none"
+                onClick={() => removeOrder(order._id)}
+                title="Remove Order"
+              >
+                <img
+                  src={assets.bin_icon}
+                  alt="Remove Order"
+                  className="w-6 h-6 mb-1"
+                />
+                <span className="text-xs text-red-600 font-semibold text-center">
+                  Remove Order
+                </span>
+              </div>
+            </div>
+
+            {/* Detalii comandă */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 border-t pt-4 mt-4">
               <div>
-                <p>{order.address.street + ","}</p>
+                <p className="font-medium">Customer:</p>
+                <p>{order.address.firstName + " " + order.address.lastName}</p>
+                <p> Phone Nr:{order.address.phone}</p>
+              </div>
+
+              <div>
+                <p className="font-medium">Address:</p>
+                <p>{order.address.street}</p>
                 <p>
-                  {order.address.city +
-                    ", " +
-                    order.address.state +
-                    ", " +
-                    order.address.country +
-                    ", " +
-                    order.address.zipcode}
+                  {order.address.city}, {order.address.state},{" "}
+                  {order.address.country}, {order.address.zipcode}
                 </p>
               </div>
-              <p>{order.address.phone}</p>
+
+              <div>
+                <p className="font-medium">Order Info:</p>
+                <p>Items: {order.items.length}</p>
+                <p>Payment Method: {order.paymentMethod}</p>
+                <p>Payment: {order.payment ? "Done" : "Pending"}</p>
+                <p>Date: {new Date(order.date).toLocaleDateString()}</p>
+              </div>
+
+              <div>
+                <p className="font-medium text-lg">
+                  Total: {currency} {order.amount}
+                </p>
+                <select
+                  onChange={(event) => statusHandler(event, order._id)}
+                  value={order.status}
+                  className="mt-2 p-2 font-semibold border rounded w-full"
+                >
+                  <option value="Order Placed">Order Placed</option>
+                  <option value="Packing">Packing</option>
+                  <option value="Shipped">Shipped</option>
+                  <option value="Out for delivery">Out for delivery</option>
+                  <option value="Delivered">Delivered</option>
+                </select>
+              </div>
             </div>
-            <div>
-              <p className="text-sm sm:text-[15px]">
-                Items : {order.items.length}
-              </p>
-              <p className="mt-3">Method : {order.paymenthMethod}</p>
-              <p>Payment : {order.payment ? "Done" : "Pending"}</p>
-              <p>Date : {new Date(order.date).toLocaleDateString()}</p>
-            </div>
-            <p className="text-sm sm:text-[20px]">
-              {currency} {order.amount}
-            </p>
-            <select
-              onChange={(event) => statusHandler(event, order._id)}
-              value={order.status}
-              className="p-2 font-semibold"
-            >
-              <option value="Order Placed">Order Placed</option>
-              <option value="Packing">Packing</option>
-              <option value="Shipped">Shipped</option>
-              <option value="Out for delivery">Out for delivery</option>
-              <option value="Delivered">Delivered</option>
-            </select>
           </div>
         ))}
       </div>

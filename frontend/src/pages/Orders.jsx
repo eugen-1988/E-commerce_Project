@@ -61,6 +61,7 @@ const Orders = () => {
                   </p>
                   <p>Quantity: {item.quantity}</p>
                   <p>Size: {item.size}</p>
+                  {item.gender && <p>Gender: {item.gender}</p>}
                 </div>
                 <p className="mt-1">
                   Date:

@@ -119,7 +119,7 @@ const Product = () => {
           </div>
 
           <button
-            onClick={() => addToCart(productData._id, size)}
+            onClick={() => addToCart(productData._id, size, gender)}
             className="bg-orange-500 rounded-md text-white px-8 py-3 text-sm active:bg-orange-400"
           >
             ADD TO CART

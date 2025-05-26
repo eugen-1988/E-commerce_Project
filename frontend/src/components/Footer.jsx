@@ -26,8 +26,17 @@ const Footer = () => {
             <li>
               Grand Rapids blvd. Naples <br /> Florida 34120, USA
             </li>
+            <li>
+              <button
+                onClick={() => window.open("http://localhost:5175", "_blank")}
+                className="text-sm text-blue-600 underline hover:text-blue-800 mt-2"
+              >
+                Admin Panel
+              </button>
+            </li>
           </ul>
         </div>
+
         <div>
           <p className="text-xl font-medium mb-5">GET IN TOUCH</p>
           <ul className="flex flex-col gap-1 text-gray-600">

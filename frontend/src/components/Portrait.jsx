@@ -28,15 +28,19 @@ const Portrait = () => {
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 px-4">
         {portraitImages.map((src, index) => (
-          <div key={index} className="overflow-hidden  shadow-md">
+          <div
+            key={index}
+            className="rounded-xl overflow-hidden transition-shadow duration-300 hover:shadow-lg hover:shadow-gray-500/50"
+          >
             <img
               src={src}
               alt={`Custom Portrait ${index + 1}`}
-              className="w-full h-auto object-cover hover:scale-110 transition ease-in-out"
+              className="w-full h-auto object-cover transition-transform duration-300 ease-in-out hover:scale-110"
             />
           </div>
         ))}
       </div>
+
       <div className="relative overflow-hidden bg-gradient-to-l from-[#e0f7fa] to-white py-4 px-6 rounded-xl shadow-md mt-12 mb-6 max-w-3xl mx-auto">
         <div className="animate-slide-in text-center text-base sm:text-lg font-semibold text-gray-800 tracking-wide">
           Portrait (one person) – $239 &nbsp; | &nbsp; Portrait (two or more

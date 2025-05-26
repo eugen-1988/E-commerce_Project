@@ -13,13 +13,14 @@ const Cart = () => {
   useEffect(() => {
     if (products.length > 0) {
       const tempData = [];
-      for (const items in cartItems) {
-        for (const item in cartItems[items]) {
-          if (cartItems[items][item] > 0) {
+      for (const productId in cartItems) {
+        for (const sizeGenderKey in cartItems[productId]) {
+          const quantity = cartItems[productId][sizeGenderKey];
+          if (quantity > 0) {
             tempData.push({
-              _id: items,
-              size: item,
-              quantity: cartItems[items][item],
+              _id: productId,
+              sizeGender: sizeGenderKey,
+              quantity,
             });
           }
         }
@@ -38,6 +39,7 @@ const Cart = () => {
           const productData = products.find(
             (product) => product._id === item._id
           );
+          const [size, gender] = item.sizeGender.split("_");
 
           return (
             <div
@@ -60,7 +62,7 @@ const Cart = () => {
                       {productData.price}
                     </p>
                     <p className="px-2 sm:px-3 sm:py-1 border bg-slate-50">
-                      {item.size}
+                      {size} | {gender}
                     </p>
                   </div>
                 </div>
@@ -71,7 +73,7 @@ const Cart = () => {
                     ? null
                     : updateQuantity(
                         item._id,
-                        item.size,
+                        item.sizeGender,
                         Number(e.target.value)
                       )
                 }
@@ -81,10 +83,10 @@ const Cart = () => {
                 defaultValue={item.quantity}
               />
               <img
-                onClick={() => updateQuantity(item._id, item.size, 0)}
+                onClick={() => updateQuantity(item._id, item.sizeGender, 0)}
                 className="w-4 mr-4 sm:w-5 cursor-pointer"
                 src={assets.bin_icon}
-                alt=""
+                alt="Remove"
               />
             </div>
           );
