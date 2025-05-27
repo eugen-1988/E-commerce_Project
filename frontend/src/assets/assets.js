@@ -98,6 +98,13 @@ import man_img from "./man_img.jpg";
 import women_img from "./women_img.jpg";
 import trend_img from "./trend_img.jpg";
 
+import back_img from "./back_img.png";
+import front_img from "./front_img.png";
+import text_img from "./text_img.png";
+import upload_img from "./upload_img.png";
+import rotate_img from "./rotate_img.png";
+import reset_img from "./reset_img.png";
+
 import p_1 from "./p_1.jpg";
 import p_2 from "./p_2.jpg";
 import p_3 from "./p_3.jpg";
@@ -131,6 +138,12 @@ export const assets = {
   women_img,
   man_img,
   trend_img,
+  back_img,
+  front_img,
+  text_img,
+  upload_img,
+  rotate_img,
+  reset_img,
   p_1,
   p_2,
   p_3,
