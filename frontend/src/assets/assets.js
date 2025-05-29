@@ -51,7 +51,7 @@ import p_img50 from "./p_img50.jpg";
 import p_img51 from "./p_img51.jpg";
 import p_img52 from "./p_img52.jpg";
 import p_img53 from "./p_img53.jpg";
-import p_img54 from "./p_img54.jpg";
+
 import p_img55 from "./p_img55.jpg";
 import p_img56 from "./p_img56.jpg";
 import p_img57 from "./p_img57.jpg";
@@ -112,7 +112,7 @@ import rotate_img from "./rotate_img.png";
 import reset_img from "./reset_img.png";
 import save_img from "./save_img.png";
 
-import p_11 from "./p_11.jpg";
+import p_1 from "./p_1.jpg";
 import p_2 from "./p_2.jpg";
 import p_3 from "./p_3.jpg";
 import p_4 from "./p_4.jpg";
@@ -158,7 +158,7 @@ export const assets = {
   pop_art,
   logo_text,
   text,
-  p_11,
+  p_1,
   p_2,
   p_3,
   p_4,
@@ -860,19 +860,7 @@ export const products = [
     date: 1716669545448,
     bestseller: false,
   },
-  {
-    _id: "aaacb",
-    name: "Men Casual Linen Shirt",
-    description:
-      "Breathable linen shirt for casual summer outfits with relaxed fit.",
-    price: 89,
-    image: [p_img54],
-    category: "Text Design",
-    subCategory: "Topwear",
-    sizes: ["XS", "S", "M", "L", "XL", "XXL"],
-    date: 1716670645448,
-    bestseller: false,
-  },
+
   {
     _id: "aaacc",
     name: "Kids Denim Overalls",
