@@ -16,7 +16,12 @@ connectCloudinary();
 
 //middlewares
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://e-commerce-frontend-beige-omega.vercel.app",
+    credentials: true,
+  })
+);
 
 // api  endpoints
 app.use("/api/user", userRouter);
