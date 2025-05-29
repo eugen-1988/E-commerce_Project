@@ -73,7 +73,7 @@ import p_img72 from "./p_img72.jpg";
 import p_img73 from "./p_img73.jpg";
 import p_img74 from "./p_img74.jpg";
 import p_img75 from "./p_img75.jpg";
-import p_img76 from "./p_img76.jpg";
+
 import p_img77 from "./p_img77.jpg";
 
 import logo from "./logo.png";
@@ -1121,18 +1121,7 @@ export const products = [
     date: 1716693745448,
     bestseller: false,
   },
-  {
-    _id: "aaacx",
-    name: "Kids Sun Hat",
-    description: "Wide-brimmed sun hat with UPF protection.",
-    price: 110,
-    image: [p_img76],
-    category: "Text with Logo",
-    subCategory: "Accessories",
-    sizes: ["XS", "S", "M", "L", "XL", "XXL"],
-    date: 1716694845448,
-    bestseller: false,
-  },
+
   {
     _id: "aaacy",
     name: "Women Pearl Earrings",
