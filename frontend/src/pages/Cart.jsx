@@ -5,29 +5,33 @@ import { assets } from "../assets/assets";
 import CartTotal from "../components/CartTotal";
 
 const Cart = () => {
-  const { products, currency, cartItems, updateQuantity, navigate } =
-    useContext(ShopContext);
+  const {
+    products,
+    currency,
+    cartItems,
+    updateQuantity,
+    navigate,
+    customProducts,
+  } = useContext(ShopContext);
 
   const [cartData, setCartData] = useState([]);
 
   useEffect(() => {
-    if (products.length > 0) {
-      const tempData = [];
-      for (const productId in cartItems) {
-        for (const sizeGenderKey in cartItems[productId]) {
-          const quantity = cartItems[productId][sizeGenderKey];
-          if (quantity > 0) {
-            tempData.push({
-              _id: productId,
-              sizeGender: sizeGenderKey,
-              quantity,
-            });
-          }
+    const tempData = [];
+    for (const productId in cartItems) {
+      for (const sizeGenderKey in cartItems[productId]) {
+        const quantity = cartItems[productId][sizeGenderKey];
+        if (quantity > 0) {
+          tempData.push({
+            _id: productId,
+            sizeGender: sizeGenderKey,
+            quantity,
+          });
         }
       }
-      setCartData(tempData);
     }
-  }, [cartItems, products]);
+    setCartData(tempData);
+  }, [cartItems]);
 
   return (
     <div className="border-t pt-14">
@@ -36,10 +40,13 @@ const Cart = () => {
       </div>
       <div>
         {cartData.map((item, index) => {
-          const productData = products.find(
-            (product) => product._id === item._id
-          );
+          const productData =
+            products.find((product) => product._id === item._id) ||
+            customProducts[`${item._id}_${item.sizeGender}`];
+
           const [size, gender] = item.sizeGender.split("_");
+
+          if (!productData) return null;
 
           return (
             <div
@@ -49,7 +56,11 @@ const Cart = () => {
               <div className="flex items-start gap-6">
                 <img
                   className="w-16 sm:w-20"
-                  src={productData.image[0]}
+                  src={
+                    Array.isArray(productData.image)
+                      ? productData.image[0]
+                      : productData.image
+                  }
                   alt=""
                 />
                 <div>

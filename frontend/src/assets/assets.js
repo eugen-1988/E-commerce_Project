@@ -97,6 +97,12 @@ import cross_icon from "./cross_icon.png";
 import man_img from "./man_img.jpg";
 import women_img from "./women_img.jpg";
 import trend_img from "./trend_img.jpg";
+import portrait from "./portrait.jpg";
+import portrait_2pers from "./portrait_2pers.jpg";
+import animation from "./animation.jpg";
+import pop_art from "./pop_art.jpg";
+import logo_text from "./logo_text.jpg";
+import text from "./text.jpg";
 
 import back_img from "./back_img.png";
 import front_img from "./front_img.png";
@@ -104,6 +110,7 @@ import text_img from "./text_img.png";
 import upload_img from "./upload_img.png";
 import rotate_img from "./rotate_img.png";
 import reset_img from "./reset_img.png";
+import save_img from "./save_img.png";
 
 import p_1 from "./p_1.jpg";
 import p_2 from "./p_2.jpg";
@@ -144,6 +151,13 @@ export const assets = {
   upload_img,
   rotate_img,
   reset_img,
+  save_img,
+  portrait,
+  portrait_2pers,
+  animation,
+  pop_art,
+  logo_text,
+  text,
   p_1,
   p_2,
   p_3,

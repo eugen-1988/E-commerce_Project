@@ -17,6 +17,7 @@ const PlaceOrder = () => {
     getCartAmount,
     delivery_fee,
     products,
+    customProducts, // ADDED: Access customProducts from context
   } = useContext(ShopContext);
 
   const [formData, setFormData] = useState({
@@ -30,6 +31,7 @@ const PlaceOrder = () => {
     country: "",
     phone: "",
   });
+
   const onChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -40,14 +42,25 @@ const PlaceOrder = () => {
     event.preventDefault();
     try {
       let orderItems = [];
+
       for (const items in cartItems) {
         for (const itemKey in cartItems[items]) {
           if (cartItems[items][itemKey] > 0) {
             const [size, gender] = itemKey.split("_");
-            const itemInfo = structuredClone(
+
+            // Try to get product from regular products list
+            let itemInfo = structuredClone(
               products.find((product) => product._id === items)
             );
+
+            // If not found, try to get from custom products
+            if (!itemInfo) {
+              const customKey = `${items}_${itemKey}`;
+              itemInfo = structuredClone(customProducts[customKey]);
+            }
+
             if (itemInfo) {
+              itemInfo._id = items;
               itemInfo.size = size;
               itemInfo.gender = gender;
               itemInfo.quantity = cartItems[items][itemKey];
@@ -56,13 +69,14 @@ const PlaceOrder = () => {
           }
         }
       }
+
       let orderData = {
         address: formData,
         items: orderItems,
         amount: getCartAmount() + delivery_fee,
       };
+
       switch (method) {
-        // API Call for COD
         case "COD":
           const response = await axios.post(
             backendUrl + "/api/order/place",
@@ -89,7 +103,6 @@ const PlaceOrder = () => {
           } else {
             toast.error(responseStripe.data.message);
           }
-
           break;
 
         default:
@@ -198,14 +211,14 @@ const PlaceOrder = () => {
           placeholder="Phone"
         />
       </div>
-      {/* ------------    Left  Side --------------*/}
+
+      {/* ------------    Right  Side --------------*/}
       <div className="mt-8">
         <div className="mt-8 min-w-80">
           <CartTotal />
         </div>
         <div className="mt-12">
           <Title text1={"PAYMENT"} text2={"METHOD"} />
-          {/* ------------    Payment Method Selection --------------*/}
           <div className="flex gap-3 flex-col lg:flex-row">
             <div
               onClick={() => setMethod("stripe")}

@@ -123,12 +123,23 @@ const Orders = ({ token }) => {
                     className="flex items-center gap-4 border p-3 rounded shadow-sm bg-gray-50"
                   >
                     <img
-                      src={item.image?.[0] || assets.parcel_icon}
+                      src={
+                        item.image
+                          ? Array.isArray(item.image)
+                            ? item.image[0]
+                            : item.image
+                          : assets.parcel_icon
+                      }
                       alt={item.name}
                       className="w-20 h-20 object-cover rounded cursor-pointer"
-                      onClick={() => setModalImage(item.image?.[0])}
+                      onClick={() =>
+                        setModalImage(
+                          Array.isArray(item.image) ? item.image[0] : item.image
+                        )
+                      }
                       title="Click to zoom"
                     />
+
                     <div>
                       <p className="font-semibold">{item.name}</p>
                       <p>

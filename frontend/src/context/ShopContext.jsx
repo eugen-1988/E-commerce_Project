@@ -7,7 +7,7 @@ export const ShopContext = createContext();
 
 const ShopContextProvider = (props) => {
   const currency = "$";
-  const delivery_fee = 10;
+  const delivery_fee = 14;
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
@@ -24,11 +24,23 @@ const ShopContextProvider = (props) => {
     return {};
   });
 
+  const [customProducts, setCustomProducts] = useState(() => {
+    const local = localStorage.getItem("guest_customProducts");
+    if (local) {
+      try {
+        return JSON.parse(local);
+      } catch (e) {
+        console.error("Invalid guest_customProducts in localStorage");
+      }
+    }
+    return {};
+  });
+
   const [products, setProducts] = useState([]);
   const [token, setToken] = useState("");
   const navigate = useNavigate();
 
-  const addToCart = async (itemId, size, gender) => {
+  const addToCart = async (itemId, size, gender, customProductData = null) => {
     if (!size) {
       toast.error("Select Product Size");
       return;
@@ -39,18 +51,35 @@ const ShopContextProvider = (props) => {
     }
 
     let cartData = structuredClone(cartItems);
+    const sizeGenderKey = `${size}_${gender}`;
     if (cartData[itemId]) {
-      if (cartData[itemId][`${size}_${gender}`]) {
-        cartData[itemId][`${size}_${gender}`] += 1;
+      if (cartData[itemId][sizeGenderKey]) {
+        cartData[itemId][sizeGenderKey] += 1;
       } else {
-        cartData[itemId][`${size}_${gender}`] = 1;
+        cartData[itemId][sizeGenderKey] = 1;
       }
     } else {
       cartData[itemId] = {};
-      cartData[itemId][`${size}_${gender}`] = 1;
+      cartData[itemId][sizeGenderKey] = 1;
     }
 
     setCartItems(cartData);
+
+    if (customProductData) {
+      setCustomProducts((prev) => {
+        const updated = {
+          ...prev,
+          [`${itemId}_${sizeGenderKey}`]: {
+            _id: itemId,
+            size,
+            gender,
+            quantity: 1,
+            ...customProductData,
+          },
+        };
+        return updated;
+      });
+    }
 
     if (token) {
       try {
@@ -89,16 +118,10 @@ const ShopContextProvider = (props) => {
 
     if (token) {
       try {
-        // Split sizeGender back to size and gender
         const [size, gender] = sizeGender.split("_");
         await axios.post(
           backendUrl + "/api/cart/update",
-          {
-            itemId,
-            size,
-            gender,
-            quantity,
-          },
+          { itemId, size, gender, quantity },
           { headers: { token } }
         );
       } catch (error) {
@@ -111,13 +134,21 @@ const ShopContextProvider = (props) => {
   const getCartAmount = () => {
     let totalAmount = 0;
     for (const items in cartItems) {
-      let itemInfo = products.find((product) => product._id === items);
-      for (const item in cartItems[items]) {
+      for (const sizeGenderKey in cartItems[items]) {
         try {
-          if (cartItems[items][item] > 0) {
-            totalAmount += itemInfo.price * cartItems[items][item];
+          const quantity = cartItems[items][sizeGenderKey];
+          if (quantity > 0) {
+            const itemInfo =
+              products.find((product) => product._id === items) ||
+              customProducts[`${items}_${sizeGenderKey}`];
+
+            if (itemInfo) {
+              totalAmount += itemInfo.price * quantity;
+            }
           }
-        } catch (error) {}
+        } catch (error) {
+          console.error("Error calculating cart amount:", error);
+        }
       }
     }
     return totalAmount;
@@ -146,6 +177,16 @@ const ShopContextProvider = (props) => {
       );
       if (response.data.success) {
         setCartItems(response.data.cartData);
+
+        // 🔁 Load customProducts from localStorage even for logged in users
+        const local = localStorage.getItem("guest_customProducts");
+        if (local) {
+          try {
+            setCustomProducts(JSON.parse(local));
+          } catch (e) {
+            console.error("Invalid guest_customProducts in localStorage");
+          }
+        }
       }
     } catch (error) {
       console.log(error);
@@ -170,6 +211,14 @@ const ShopContextProvider = (props) => {
     }
   }, [cartItems, token]);
 
+  // ✅ Save customProducts in all cases, even when logged in
+  useEffect(() => {
+    localStorage.setItem(
+      "guest_customProducts",
+      JSON.stringify(customProducts)
+    );
+  }, [customProducts]);
+
   const value = {
     products,
     currency,
@@ -188,6 +237,7 @@ const ShopContextProvider = (props) => {
     backendUrl,
     setToken,
     token,
+    customProducts,
   };
 
   return (

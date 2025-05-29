@@ -14,6 +14,7 @@ import Footer from "./components/Footer.jsx";
 import SearchBar from "./components/SearchBar.jsx";
 import { ToastContainer, toast } from "react-toastify";
 import Verify from "./pages/Verify.jsx";
+import PreviewCustomProduct from "./pages/PreviewCustomProduct.jsx";
 
 const App = () => {
   return (
@@ -33,7 +34,11 @@ const App = () => {
         <Route path="/place-order" element={<PlaceOrder />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/verify" element={<Verify />} />
-        <Route path="/DesignYourOwn" element={<DesignYourOwn />} />
+        <Route path="/design-your-own" element={<DesignYourOwn />} />
+        <Route
+          path="/preview-custom-product"
+          element={<PreviewCustomProduct />}
+        />
       </Routes>
       <Footer />
     </div>
