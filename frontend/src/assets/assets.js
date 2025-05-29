@@ -51,7 +51,7 @@ import p_img50 from "./p_img50.jpg";
 import p_img51 from "./p_img51.jpg";
 import p_img52 from "./p_img52.jpg";
 import p_img53 from "./p_img53.jpg";
-import img54 from "./img54.jpg";
+import p_img54 from "./p_img54.jpg";
 import p_img55 from "./p_img55.jpg";
 import p_img56 from "./p_img56.jpg";
 import p_img57 from "./p_img57.jpg";
@@ -866,7 +866,7 @@ export const products = [
     description:
       "Breathable linen shirt for casual summer outfits with relaxed fit.",
     price: 89,
-    image: [img54],
+    image: [p_img54],
     category: "Text Design",
     subCategory: "Topwear",
     sizes: ["XS", "S", "M", "L", "XL", "XXL"],
