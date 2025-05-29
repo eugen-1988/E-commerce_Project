@@ -112,7 +112,7 @@ import rotate_img from "./rotate_img.png";
 import reset_img from "./reset_img.png";
 import save_img from "./save_img.png";
 
-import p_1 from "./p_1.jpg";
+import p_11 from "./p_11.jpg";
 import p_2 from "./p_2.jpg";
 import p_3 from "./p_3.jpg";
 import p_4 from "./p_4.jpg";
@@ -158,7 +158,7 @@ export const assets = {
   pop_art,
   logo_text,
   text,
-  p_1,
+  p_11,
   p_2,
   p_3,
   p_4,
