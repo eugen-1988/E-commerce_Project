@@ -32,7 +32,12 @@ const Footer = () => {
             </li>
             <li>
               <button
-                onClick={() => window.open("http://localhost:5175", "_blank")}
+                onClick={() =>
+                  window.open(
+                    "https://e-commerce-admin-orpin-nine.vercel.app",
+                    "_blank"
+                  )
+                }
                 className="text-sm text-blue-600 underline hover:text-blue-800 mt-2"
               >
                 Admin Panel
