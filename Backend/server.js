@@ -21,6 +21,10 @@ app.use(express.json());
 app.use(
   cors({
     origin: [
+      // 🔁 Adaugă aici frontend-ul actual
+      "https://e-commerce-frontend-git-master-eugens-projects-ce03cab9.vercel.app",
+
+      // ✅ Poți păstra și celelalte frontenduri/admin
       "https://e-commerce-frontend-beige-omega.vercel.app",
       "https://e-commerce-admin-orpin-nine.vercel.app",
     ],
