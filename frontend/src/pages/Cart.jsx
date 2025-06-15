@@ -61,7 +61,7 @@ const Cart = () => {
                       ? productData.image[0]
                       : productData.image
                   }
-                  alt=""
+                  alt="Custom denim jacket product"
                 />
                 <div>
                   <p className="text-xs sm:text-lg font-medium">

@@ -6,7 +6,11 @@ const Footer = () => {
     <div>
       <div className="flex flex-col sm:grid grid-cols-[3fr_1fr_1fr] gap-14 my-10 mt-40 text-sm ">
         <div>
-          <img src={assets.logo} className="mb-5 w-48" alt="" />
+          <img
+            src={assets.logo}
+            className="mb-5 w-48"
+            alt="Marcal - Custom Denim Jacket Logo"
+          />
           <p className="w-full md:w-2/3 text-gray-600">
             Every jacket is a canvas. At Painting by Marcal, each piece is
             hand-painted with care, passion, and bold creativity. No two designs
@@ -28,12 +32,7 @@ const Footer = () => {
             </li>
             <li>
               <button
-                onClick={() =>
-                  window.open(
-                    "https://e-commerce-admin-orpin-nine.vercel.app",
-                    "_blank"
-                  )
-                }
+                onClick={() => window.open("http://localhost:5175", "_blank")}
                 className="text-sm text-blue-600 underline hover:text-blue-800 mt-2"
               >
                 Admin Panel

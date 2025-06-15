@@ -22,29 +22,33 @@ const PreviewCustomProduct = ({
 }) => {
   const [selectedStyles, setSelectedStyles] = useState([]);
   const [textDesignQty, setTextDesignQty] = useState(1);
+  const [image, setImage] = useState(productData.image?.[0]);
+  const [size, setSize] = useState(null);
+  const [gender, setGender] = useState(null);
+
+  const { addToCart } = useContext(ShopContext);
+
+  const styleMap = {
+    Portrait: 289,
+    "Portrait Two or More Person": 289,
+    Animation: 220,
+    "Pop Art": 289,
+    "Logo and Text Design": 110,
+    "Text Design": 69,
+  };
 
   const toggleCategory = (e) => {
     const { value, checked } = e.target;
-    const styleMap = {
-      Portrait: 289,
-      "Portrait Two or More Person": 289,
-      Animation: 220,
-      "Pop Art": 289,
-      "Logo and Text Design": 110,
-      "Text Design": 69,
-    };
 
     if (value === "Text Design" && checked) {
-      setTextDesignQty(1); // reset la selectare
+      setTextDesignQty(1);
     }
 
-    setSelectedStyles((prev) => {
-      if (checked) {
-        return [...prev, { name: value, price: styleMap[value] }];
-      } else {
-        return prev.filter((item) => item.name !== value);
-      }
-    });
+    setSelectedStyles((prev) =>
+      checked
+        ? [...prev, { name: value, price: styleMap[value] }]
+        : prev.filter((item) => item.name !== value)
+    );
   };
 
   const subtotal = selectedStyles.reduce((sum, item) => {
@@ -54,15 +58,11 @@ const PreviewCustomProduct = ({
     return sum + item.price;
   }, 0);
 
-  const [image, setImage] = useState(productData.image?.[0]);
   const defaultSizes = ["XS", "S", "M", "L", "XL", "XXL"];
   const sizes =
     Array.isArray(productData.sizes) && productData.sizes.length === 6
       ? productData.sizes
       : defaultSizes;
-  const [size, setSize] = useState(null);
-  const [gender, setGender] = useState(null);
-  const { addToCart } = useContext(ShopContext);
 
   const uploadToCloudinary = async (base64Image) => {
     const data = new FormData();
@@ -87,12 +87,10 @@ const PreviewCustomProduct = ({
       toast.error("Please select at least one style option.");
       return;
     }
-
     if (!size) {
       toast.error("Please select a size.");
       return;
     }
-
     if (!gender) {
       toast.error("Please select a gender.");
       return;
@@ -101,7 +99,7 @@ const PreviewCustomProduct = ({
     try {
       const uploadedImage = canvasImage
         ? await uploadToCloudinary(canvasImage)
-        : image; // fallback dacă nu ai imagine nouă
+        : image;
 
       addToCart(productData._id, size, gender, {
         name: productData.name,
@@ -118,9 +116,12 @@ const PreviewCustomProduct = ({
 
   return (
     <div className="border-t-2 pt-10 transition-opacity ease-in duration-500 opacity-100">
+      {/* Section Title */}
       <div className="flex justify-center items-center text-center my-4">
-        <Title text1={"CHOOSE"} text2={"YOUR STYLE OPTION"} />
+        <Title text1="CHOOSE" text2="YOUR STYLE OPTION" />
       </div>
+
+      {/* Style Options */}
       <div className="w-full overflow-x-auto bg-white border-y-2 border-gray-300 py-6">
         <div className="flex flex-wrap lg:flex-nowrap justify-center gap-6 px-6 max-h-[500px]">
           {[
@@ -159,27 +160,31 @@ const PreviewCustomProduct = ({
         </div>
       </div>
 
+      {/* Main Content Area */}
       <div className="flex gap-12 sm:gap-12 flex-col sm:flex-row">
+        {/* Image Selection */}
         <div className="flex-1 flex flex-col-reverse gap-3 sm:flex-row">
           <div className="flex sm:flex-col overflow-x-auto sm:overflow-y-scroll justify-between sm:justify-normal sm:w-[18.7%] w-full">
             {productData.image.map((item, index) => (
               <img
+                key={index}
                 onClick={() => setImage(item)}
                 src={item}
-                key={index}
                 className="w-[24%] sm:w-full sm:mb-3 flex-shrink-0 cursor-pointer"
-                alt=""
+                alt="preview"
               />
             ))}
           </div>
           <div className="w-full sm:w-[80%]">
-            <img className="w-full h-auto" src={image} alt="" />
+            <img className="w-full h-auto" src={image} alt="main-preview" />
           </div>
         </div>
 
+        {/* Style, Size, Gender, Cart Section */}
         <div className="flex-1">
-          <div className="flex flex-col gap-4 my-8 ">
-            <Title text1={"Select"} text2={"Your Style"} />
+          {/* Style Options */}
+          <div className="flex flex-col gap-4 my-8">
+            <Title text1="Select" text2="Your Style" />
             <div className="flex flex-col gap-2 text-sm text-gray-700">
               {[
                 { label: "Portrait", price: 289 },
@@ -192,6 +197,7 @@ const PreviewCustomProduct = ({
                 const isSelected = selectedStyles.some(
                   (s) => s.name === option.label
                 );
+
                 return (
                   <div key={idx} className="flex flex-col">
                     <label className="flex items-center gap-3 border border-gray-200 rounded-md px-4 py-2 hover:shadow-sm">
@@ -246,6 +252,7 @@ const PreviewCustomProduct = ({
               })}
             </div>
 
+            {/* Price Summary */}
             <div className="w-full flex justify-end">
               <div className="w-full max-w-md px-4 py-3 border rounded-md text-sm flex flex-col gap-2">
                 <div className="flex justify-between">
@@ -266,16 +273,17 @@ const PreviewCustomProduct = ({
             </div>
           </div>
 
+          {/* Size Selection */}
           <div className="flex flex-col gap-4 my-8">
             <p>Select Size</p>
             <div className="flex gap-2">
               {sizes.map((item, index) => (
                 <button
+                  key={index}
                   onClick={() => setSize(item)}
                   className={`border py-2 px-4 bg-gray-200 ${
                     item === size ? "border-orange-500 text-orange-500" : ""
                   }`}
-                  key={index}
                 >
                   {item}
                 </button>
@@ -283,18 +291,19 @@ const PreviewCustomProduct = ({
             </div>
           </div>
 
+          {/* Gender Selection */}
           <div className="flex flex-col gap-4 my-8">
             <p>Select Gender</p>
             <div className="flex gap-10">
               {["Women", "Men"].map((g) => (
                 <div
                   key={g}
-                  className="flex flex-col items-center gap-2"
+                  className="flex flex-col items-center gap-2 cursor-pointer"
                   onClick={() => setGender(g)}
                 >
                   <img
                     src={g === "Women" ? assets.women_img : assets.man_img}
-                    className={`w-24 h-24 object-cover border-2 cursor-pointer rounded-md ${
+                    className={`w-24 h-24 object-cover border-2 rounded-md ${
                       gender === g ? "border-orange-500" : "border-gray-300"
                     }`}
                     alt={`${g}'s Jacket`}
@@ -305,6 +314,7 @@ const PreviewCustomProduct = ({
             </div>
           </div>
 
+          {/* Add to Cart */}
           <button
             onClick={handleAddToCart}
             className="bg-orange-500 rounded-md text-white px-8 py-3 text-sm active:bg-orange-400"
@@ -312,6 +322,7 @@ const PreviewCustomProduct = ({
             ADD TO CART
           </button>
 
+          {/* Footer Info */}
           <hr className="mt-8 sm:w-4/5 border-gray-300 border-t-2" />
           <div className="text-sm text-gray-500 mt-5 flex flex-col gap-1">
             <p>100% Original product.</p>
@@ -321,6 +332,7 @@ const PreviewCustomProduct = ({
         </div>
       </div>
 
+      {/* Description */}
       <div className="mt-20">
         <div className="flex">
           <b className="border px-5 py-3 text-sm">Description</b>

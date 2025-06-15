@@ -43,23 +43,27 @@ const Product = () => {
                 src={item}
                 key={index}
                 className="w-[24%] sm:w-full sm:mb-3 flex-shrink-0 cursor-pointer"
-                alt=""
+                alt="Custom denim jacket product"
               />
             ))}
           </div>
           <div className="w-full sm:w-[80%] ">
-            <img className="w-full h-auto" src={image} alt="" />
+            <img
+              className="w-full h-auto"
+              src={image}
+              alt="Custom denim jacket product"
+            />
           </div>
         </div>
         {/* -------Product Info----------*/}
         <div className="flex-1">
           <h1 className="font-medium text-2xl mt-2">{productData.name}</h1>
           <div className="flex items-center gap-1 mt-2">
-            <img src={assets.star_icon} alt=" " className="w-3 5" />
-            <img src={assets.star_icon} alt=" " className="w-3 5" />
-            <img src={assets.star_icon} alt=" " className="w-3 5" />
-            <img src={assets.star_icon} alt=" " className="w-3 5" />
-            <img src={assets.star_icon} alt=" " className="w-3 5" />
+            <img src={assets.star_icon} alt="star_icon" className="w-3 5" />
+            <img src={assets.star_icon} alt="star_icon" className="w-3 5" />
+            <img src={assets.star_icon} alt="star_icon" className="w-3 5" />
+            <img src={assets.star_icon} alt="star_icon" className="w-3 5" />
+            <img src={assets.star_icon} alt="star_icon" className="w-3 5" />
             <p className="pl-2">(122)</p>
           </div>
           <p className="mt-5 text-3xl font-medium">

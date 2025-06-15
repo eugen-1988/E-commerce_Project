@@ -26,64 +26,78 @@ const Navbar = () => {
   return (
     <div className="flex items-center justify-between py-5 font-medium">
       <Link to="/">
-        <img src={assets.logo} className="w-48 " alt="" />
+        <img
+          src={assets.logo}
+          className="w-48 "
+          alt="Marcal - Custom Denim Jacket Logo"
+        />
       </Link>
-      <ul className="hidden sm:flex gap-5 text-base text-gray-600">
-        <NavLink
-          to="/"
-          className="flex flex-col items-center gap-1 hover:text-black"
-        >
-          <p>HOME</p>
-          <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden"></hr>
-        </NavLink>
-        <NavLink
-          to="/collection"
-          className="flex flex-col items-center gap-1 hover:text-black"
-        >
-          <p>COLLECTION</p>
-          <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden"></hr>
-        </NavLink>
-        <NavLink
-          to="/about-me"
-          className="flex flex-col items-center gap-1 hover:text-black"
-        >
-          <p>ABOUT ME</p>
-          <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden"></hr>
-        </NavLink>
-        <NavLink
-          to="/design-your-own"
-          className="flex flex-col items-center gap-1 hover:text-black"
-        >
-          <p>DESIGN YOUR OWN</p>
-          <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden"></hr>
-        </NavLink>
-        <NavLink
-          to="/contact"
-          className="flex flex-col items-center gap-1 hover:text-black"
-        >
-          <p>CONTACT</p>
-          <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden"></hr>
-        </NavLink>
+      <ul className="hidden lg:flex gap-5 text-base text-gray-600">
+        <li>
+          <NavLink
+            to="/"
+            className="flex flex-col items-center gap-1 hover:text-black"
+          >
+            <p>HOME</p>
+            <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden" />
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/collection"
+            className="flex flex-col items-center gap-1 hover:text-black"
+          >
+            <p>COLLECTION</p>
+            <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden" />
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/about-me"
+            className="flex flex-col items-center gap-1 hover:text-black"
+          >
+            <p>ABOUT ME</p>
+            <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden" />
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/design-your-own"
+            className="flex flex-col items-center gap-1 hover:text-black"
+          >
+            <p>DESIGN YOUR OWN</p>
+            <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden" />
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/contact"
+            className="flex flex-col items-center gap-1 hover:text-black"
+          >
+            <p>CONTACT</p>
+            <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden" />
+          </NavLink>
+        </li>
       </ul>
+
       <div className="flex items-center gap-6">
         <img
           onClick={() => setShowSearch(true)}
           src={assets.search_icon}
           className="w-5 cursor-pointer"
-          alt=""
+          alt="search_icon"
         />
         <div className="group relative">
           <img
             onClick={() => (token ? null : navigate("/login"))}
             className="w-5 cursor-pointer"
             src={assets.profile_icon}
-            alt=""
+            alt="profile_icon"
           />
           {/* ----  Dropdown  ----  */}
           {token && (
             <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-2">
               <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-500 rounded ">
-                <p className="cursor-pointer hover:text-black">My Profile</p>
                 <p
                   onClick={() => navigate("/orders")}
                   className="cursor-pointer hover:text-black"
@@ -98,7 +112,7 @@ const Navbar = () => {
           )}
         </div>
         <Link to="/cart" className="relative">
-          <img src={assets.cart_icon} className="w-5 min-w-5" alt="" />
+          <img src={assets.cart_icon} className="w-5 min-w-5" alt="cart_icon" />
           <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-black text-white aspect-square rounded-full text-[8px]">
             {getCartCount()}
           </p>
@@ -106,14 +120,14 @@ const Navbar = () => {
         <img
           onClick={() => setVisible(true)}
           src={assets.menu_icon}
-          className="w-5 cursor-pointer sm:hidden"
-          alt=""
+          className="w-5 cursor-pointer lg:hidden"
+          alt="menu_icon"
         />
       </div>
 
-      {/*Sidebar menu for small screens */}
+      {/* Sidebar menu for small screens */}
       <div
-        className={`absolute top-0 right-0 bottom-0 overflow-hidden bg-white transition-all ${
+        className={`fixed top-0 right-0 bottom-0 z-50 bg-white transition-all duration-300 ease-in-out lg:hidden ${
           visible ? "w-full" : "w-0"
         }`}
       >
@@ -122,41 +136,81 @@ const Navbar = () => {
             onClick={() => setVisible(false)}
             className="flex items-center gap-4 p-3 cursor-pointer"
           >
-            <img className="h-4 rotate-180" src={assets.dropdown_icon} alt="" />
+            <img
+              className="h-4 rotate-180"
+              src={assets.dropdown_icon}
+              alt="dropdown_icon"
+            />
             <p>Back</p>
           </div>
+
+          {/* NavLink-uri cu stil activ */}
           <NavLink
-            onClick={() => setVisible(false)}
-            className="py-2 pl-6 border"
             to="/"
+            onClick={() => setVisible(false)}
+            className={({ isActive }) =>
+              `py-2 pl-6 border block transition-colors duration-200 ${
+                isActive
+                  ? "bg-black text-white"
+                  : "text-gray-600 hover:bg-gray-100"
+              }`
+            }
           >
             Home
           </NavLink>
+
           <NavLink
-            onClick={() => setVisible(false)}
-            className="py-2 pl-6 border"
             to="/collection"
+            onClick={() => setVisible(false)}
+            className={({ isActive }) =>
+              `py-2 pl-6 border block transition-colors duration-200 ${
+                isActive
+                  ? "bg-black text-white"
+                  : "text-gray-600 hover:bg-gray-100"
+              }`
+            }
           >
             COLLECTION
           </NavLink>
+
           <NavLink
-            onClick={() => setVisible(false)}
-            className="py-2 pl-6 border"
             to="/about-me"
+            onClick={() => setVisible(false)}
+            className={({ isActive }) =>
+              `py-2 pl-6 border block transition-colors duration-200 ${
+                isActive
+                  ? "bg-black text-white"
+                  : "text-gray-600 hover:bg-gray-100"
+              }`
+            }
           >
             ABOUT ME
           </NavLink>
+
           <NavLink
-            onClick={() => setVisible(false)}
-            className="py-2 pl-6 border"
             to="/design-your-own"
+            onClick={() => setVisible(false)}
+            className={({ isActive }) =>
+              `py-2 pl-6 border block transition-colors duration-200 ${
+                isActive
+                  ? "bg-black text-white"
+                  : "text-gray-600 hover:bg-gray-100"
+              }`
+            }
           >
             DESIGN YOUR OWN
           </NavLink>
+
           <NavLink
-            onClick={() => setVisible(false)}
-            className="py-2 pl-6 border"
             to="/contact"
+            onClick={() => setVisible(false)}
+            className={({ isActive }) =>
+              `py-2 pl-6 border block transition-colors duration-200 ${
+                isActive
+                  ? "bg-black text-white"
+                  : "text-gray-600 hover:bg-gray-100"
+              }`
+            }
           >
             CONTACT
           </NavLink>

@@ -54,7 +54,7 @@ const Orders = () => {
               <img
                 className="w-16 sm:w-20"
                 src={Array.isArray(item.image) ? item.image[0] : item.image}
-                alt=""
+                alt="Custom denim jacket"
               />
               <div>
                 <p className="sm:text-base font-medium">{item.name}</p>

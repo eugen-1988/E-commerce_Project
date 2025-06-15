@@ -7,6 +7,7 @@ import PreviewCustomProduct from "./PreviewCustomProduct";
 const DesignYourOwn = () => {
   const canvasRef = useRef(null);
   const previewRef = useRef(null);
+
   const [bgImage, setBgImage] = useState(assets.back_img);
   const [showTextEditor, setShowTextEditor] = useState(false);
   const [activeText, setActiveText] = useState(null);
@@ -21,6 +22,24 @@ const DesignYourOwn = () => {
     angle: 0,
   });
 
+  const [isMobile, setIsMobile] = useState(false);
+  const wasMobileRef = useRef(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      const nowMobile = window.innerWidth < 1024;
+      setIsMobile(nowMobile);
+      if (!nowMobile && wasMobileRef.current) {
+        window.location.reload();
+      }
+      wasMobileRef.current = nowMobile;
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   useEffect(() => {
     if (!canvasRef.current) return;
 
@@ -30,18 +49,19 @@ const DesignYourOwn = () => {
 
     const resizeCanvas = () => {
       const container = canvasRef.current?.parentElement;
-      if (!container) return;
-      if (!canvas.lowerCanvasEl) return;
+      if (!container || !canvas.lowerCanvasEl) return;
 
       canvas.setWidth(container.clientWidth);
       canvas.setHeight(container.clientHeight);
       canvas.renderAll();
     };
+
     const img = new Image();
     img.src = bgImage;
 
-    img.onload = function () {
+    img.onload = () => {
       resizeCanvas();
+
       const fabricBg = new fabric.Image(img, {
         selectable: false,
         evented: false,
@@ -56,18 +76,19 @@ const DesignYourOwn = () => {
       fabricBg.top = (canvas.getHeight() - fabricBg.getScaledHeight()) / 2;
 
       canvas.add(fabricBg);
-
       canvas.renderAll();
     };
 
     canvasRef.current.fabric = canvas;
 
-    canvas.on("selection:created", updateDeleteIconHTML);
-    canvas.on("selection:updated", updateDeleteIconHTML);
+    const update = () => updateDeleteIconHTML();
+
+    canvas.on("selection:created", update);
+    canvas.on("selection:updated", update);
     canvas.on("selection:cleared", () => setDeleteIconPos(null));
-    canvas.on("object:moving", updateDeleteIconHTML);
-    canvas.on("object:scaling", updateDeleteIconHTML);
-    canvas.on("object:rotating", updateDeleteIconHTML);
+    canvas.on("object:moving", update);
+    canvas.on("object:scaling", update);
+    canvas.on("object:rotating", update);
 
     window.addEventListener("resize", resizeCanvas);
 
@@ -95,6 +116,7 @@ const DesignYourOwn = () => {
   const handleDelete = () => {
     const canvas = canvasRef.current?.fabric;
     if (!canvas) return;
+
     const activeObject = canvas.getActiveObject();
     if (activeObject) {
       canvas.remove(activeObject);
@@ -140,19 +162,13 @@ const DesignYourOwn = () => {
     if (!canvas || !activeText) return;
 
     if (activeText.type === "group" && Array.isArray(activeText._objects)) {
-      activeText._objects.forEach((obj) => {
-        if (obj.set) obj.set(option, value);
-      });
+      activeText._objects.forEach((obj) => obj.set && obj.set(option, value));
     } else {
       activeText.set(option, value);
     }
 
     canvas.renderAll();
-
-    setTextOptions((prev) => ({
-      ...prev,
-      [option]: value,
-    }));
+    setTextOptions((prev) => ({ ...prev, [option]: value }));
   };
 
   const updateRotation = (angle) => {
@@ -162,10 +178,7 @@ const DesignYourOwn = () => {
     activeText.set("angle", angle);
     canvas.renderAll();
 
-    setTextOptions((prev) => ({
-      ...prev,
-      angle,
-    }));
+    setTextOptions((prev) => ({ ...prev, angle }));
   };
 
   const toggleCurvedText = () => {
@@ -262,14 +275,10 @@ const DesignYourOwn = () => {
       const imgElement = new Image();
       imgElement.src = f.target.result;
 
-      imgElement.onload = function () {
+      imgElement.onload = () => {
         const fabricImage = new fabric.Image(imgElement);
         fabricImage.scaleToWidth(200);
-        fabricImage.set({
-          left: 300,
-          top: 150,
-          selectable: true,
-        });
+        fabricImage.set({ left: 300, top: 150, selectable: true });
 
         const canvas = canvasRef.current?.fabric;
         if (canvas) {
@@ -292,14 +301,12 @@ const DesignYourOwn = () => {
     const canvas = canvasRef.current?.fabric;
     if (!canvas) return;
 
-    // Șterge tot conținutul
     canvas.clear();
 
-    // Reîncarcă imaginea de fundal
     const img = new Image();
     img.src = bgImage;
 
-    img.onload = function () {
+    img.onload = () => {
       const fabricBg = new fabric.Image(img, {
         selectable: false,
         evented: false,
@@ -307,7 +314,6 @@ const DesignYourOwn = () => {
         hasBorders: false,
       });
 
-      // Scalează și centrează imaginea
       fabricBg.scaleToWidth(canvas.getWidth());
       fabricBg.scaleToHeight(canvas.getHeight());
 
@@ -318,25 +324,36 @@ const DesignYourOwn = () => {
       canvas.renderAll();
     };
 
-    // Resetări adiționale
     setActiveText(null);
     setShowTextEditor(false);
     setDeleteIconPos(null);
   };
+  if (isMobile) {
+    return (
+      <div className="flex flex-col items-center justify-center text-center px-4 py-10">
+        <img
+          src={assets.trend_img}
+          alt="Not supported"
+          className="w-64 mx-auto mb-4 rounded-lg"
+        />
+        <p className="text-lg text-gray-700">
+          Our editor is available only on larger screens. <br />
+          Please access from a laptop or tablet to customize your product.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <>
-      {/* CONȚINUTUL CENTRAL: CANVAS, EDITOR */}
       <div className="flex flex-col items-center gap-4 p-4 w-full max-w-screen-xl mx-auto relative">
         <Title text1={"CREATE"} text2={"YOUR OWN DESIGN"} />
+
         <div className="relative flex flex-col lg:flex-row items-start w-full gap-2">
-          {/* BUTOANE ȘI CANVAS */}
+          {/* Canvas & Buttons */}
           <div className="relative border border-gray-400 w-full lg:w-auto">
             <div className="absolute top-2 left-2 z-10 flex flex-col items-center gap-2">
-              <label
-                className="flex flex-col items-center p-1 border border-transparent rounded bg-white shadow-md w-14 
-                hover:bg-gray-100 hover:border-gray-400 transition-all duration-200"
-              >
+              <label className="flex flex-col items-center p-1 border border-transparent rounded bg-white shadow-md w-14 hover:bg-gray-100 hover:border-gray-400 transition-all duration-200">
                 <img src={assets.upload_img} alt="Upload" className="w-6 h-6" />
                 <span className="text-[10px]">Upload</span>
                 <input
@@ -349,8 +366,7 @@ const DesignYourOwn = () => {
 
               <button
                 onClick={rotateActiveObject}
-                className="flex flex-col items-center p-1 border border-transparent rounded bg-white shadow-md w-14 
-                hover:bg-gray-100 hover:border-gray-400 transition-all duration-200"
+                className="flex flex-col items-center p-1 border border-transparent rounded bg-white shadow-md w-14 hover:bg-gray-100 hover:border-gray-400 transition-all duration-200"
               >
                 <img src={assets.rotate_img} alt="Rotate" className="w-6 h-6" />
                 <span className="text-[10px]">Rotate</span>
@@ -358,8 +374,7 @@ const DesignYourOwn = () => {
 
               <button
                 onClick={resetCanvas}
-                className="flex flex-col items-center p-1 border border-transparent rounded bg-white shadow-md w-14 
-                hover:bg-gray-100 hover:border-gray-400 transition-all duration-200"
+                className="flex flex-col items-center p-1 border border-transparent rounded bg-white shadow-md w-14 hover:bg-gray-100 hover:border-gray-400 transition-all duration-200"
               >
                 <img src={assets.reset_img} alt="Reset" className="w-6 h-6" />
                 <span className="text-[10px]">Reset</span>
@@ -371,13 +386,11 @@ const DesignYourOwn = () => {
                   if (!canvas) return;
                   const image = canvas.toDataURL({ format: "png", quality: 1 });
                   setSavedImage(image);
-
                   setTimeout(() => {
                     previewRef.current?.scrollIntoView({ behavior: "smooth" });
                   }, 100);
                 }}
-                className="flex flex-col items-center p-1 border border-transparent rounded bg-white shadow-md w-14 
-                  hover:bg-green-100 hover:border-green-400 hover:scale-[1.05] transition-all duration-200"
+                className="flex flex-col items-center p-1 border border-transparent rounded bg-white shadow-md w-14 hover:bg-green-100 hover:border-green-400 hover:scale-[1.05] transition-all duration-200"
               >
                 <img src={assets.save_img} alt="Save" className="w-6 h-6" />
                 <span className="text-[10px] font-semibold text-green-700">
@@ -421,12 +434,11 @@ const DesignYourOwn = () => {
             </div>
           </div>
 
-          {/* EDITOR TEXT */}
+          {/* Text Editor */}
           <div className="relative flex flex-col items-start gap-1 mt-4 lg:mt-0">
             <button
               onClick={addText}
-              className="flex flex-col items-center p-1 border border-transparent rounded bg-white shadow-md w-14 
-                hover:bg-gray-100 hover:border-gray-400 transition-all duration-200"
+              className="flex flex-col items-center p-1 border border-transparent rounded bg-white shadow-md w-14 hover:bg-gray-100 hover:border-gray-400 transition-all duration-200"
             >
               <img src={assets.text_img} alt="Text" className="w-8 h-6" />
               <span className="text-[10px]">Add Text</span>
@@ -434,6 +446,7 @@ const DesignYourOwn = () => {
 
             {showTextEditor && (
               <div className="bg-white border border-gray-200 rounded-xl shadow-lg p-5 w-[280px] max-w-[90vw] mt-1 text-sm flex flex-col gap-4">
+                {/* Input Text */}
                 <div>
                   <label className="block mb-1 text-xs font-semibold text-gray-600 uppercase tracking-wide">
                     Text
@@ -449,14 +462,11 @@ const DesignYourOwn = () => {
                       const canvas = canvasRef.current.fabric;
 
                       if (activeText.type === "group") {
-                        const fontSize = textOptions.fontSize;
-                        const fill = textOptions.fill;
-                        const fontFamily = textOptions.fontFamily;
+                        const { fontSize, fill, fontFamily } = textOptions;
                         const centerX = activeText.left;
                         const centerY = activeText.top;
                         const arcAngle = Math.PI / 2;
                         const radius = 100;
-
                         const letters = newText.split("");
                         const angleStep =
                           arcAngle / Math.max(letters.length - 1, 1);
@@ -502,6 +512,7 @@ const DesignYourOwn = () => {
                   />
                 </div>
 
+                {/* Font Size */}
                 <div>
                   <label className="block mb-1 text-xs font-semibold text-gray-600 uppercase tracking-wide">
                     Font size
@@ -518,6 +529,7 @@ const DesignYourOwn = () => {
                   />
                 </div>
 
+                {/* Color */}
                 <div>
                   <label className="block mb-1 text-xs font-semibold text-gray-600 uppercase tracking-wide">
                     Color
@@ -530,6 +542,7 @@ const DesignYourOwn = () => {
                   />
                 </div>
 
+                {/* Font Family */}
                 <div>
                   <label className="block mb-1 text-xs font-semibold text-gray-600 uppercase tracking-wide">
                     Font Family
@@ -579,6 +592,7 @@ const DesignYourOwn = () => {
                   </select>
                 </div>
 
+                {/* Rotation */}
                 <div>
                   <label className="block mb-1 text-xs font-semibold text-gray-600 uppercase tracking-wide">
                     Rotation
@@ -592,23 +606,20 @@ const DesignYourOwn = () => {
                     className="w-full accent-[#007c99]"
                   />
                   <div className="text-[11px] text-center text-gray-500 mt-1">
-                    {textOptions.angle}°
+                    {textOptions.angle}&deg;
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-3 mt-2">
                   <button
                     onClick={toggleCurvedText}
-                    className="px-4 py-2 rounded-md bg-[#005f78] text-white text-sm font-medium shadow-sm 
-                     hover:bg-[#007c99] hover:scale-[1.02] transition-all duration-200 ease-out"
+                    className="px-4 py-2 rounded-md bg-[#005f78] text-white text-sm font-medium shadow-sm hover:bg-[#007c99] hover:scale-[1.02] transition-all duration-200 ease-out"
                   >
                     Toggle Curved
                   </button>
-
                   <button
                     onClick={() => setShowTextEditor(false)}
-                    className="px-4 py-2 rounded-md bg-gray-100 text-sm text-gray-700 font-medium border border-gray-300 
-                     hover:bg-gray-200 hover:text-black hover:scale-[1.01] transition-all duration-200 ease-out"
+                    className="px-4 py-2 rounded-md bg-gray-100 text-sm text-gray-700 font-medium border border-gray-300 hover:bg-gray-200 hover:text-black hover:scale-[1.01] transition-all duration-200 ease-out"
                   >
                     Close Editor
                   </button>
@@ -619,7 +630,7 @@ const DesignYourOwn = () => {
         </div>
       </div>
 
-      {/* PREVIEW LARG - ÎN AFARA CONTAINERULUI */}
+      {/* Preview Area */}
       {savedImage && (
         <div className="w-full px-4 mt-10" ref={previewRef}>
           <PreviewCustomProduct
@@ -631,7 +642,7 @@ const DesignYourOwn = () => {
               sizes: ["S", "M", "L", "XL"],
               description: "This is your custom-designed product preview.",
             }}
-            canvasImage={savedImage} // 🔥 AICI e cheia
+            canvasImage={savedImage}
           />
         </div>
       )}

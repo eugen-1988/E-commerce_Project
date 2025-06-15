@@ -178,7 +178,6 @@ const ShopContextProvider = (props) => {
       if (response.data.success) {
         setCartItems(response.data.cartData);
 
-        // 🔁 Load customProducts from localStorage even for logged in users
         const local = localStorage.getItem("guest_customProducts");
         if (local) {
           try {
@@ -211,7 +210,6 @@ const ShopContextProvider = (props) => {
     }
   }, [cartItems, token]);
 
-  // ✅ Save customProducts in all cases, even when logged in
   useEffect(() => {
     localStorage.setItem(
       "guest_customProducts",
