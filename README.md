@@ -12,9 +12,9 @@ Eine Full-Stack-E-Commerce-Plattform, auf der Nutzer personalisierte Jeansjacken
 
 ## 🔗 Live Demo Links
 
-* **Frontend:** [Live Store](https://e-commerce-frontend.vercel.app)
-* **Admin Panel:** [Admin Dashboard](https://e-commerce-admin.vercel.app)
-* **Backend API:** [API Endpoint](https://e-commerce-backend.vercel.app)
+* **Frontend:** [Live Store](https://e-commerce-frontend-beige-omega.vercel.app/)
+* **Admin Panel:** [Admin Dashboard](https://e-commerce-admin-orpin-nine.vercel.app/orders)
+* **Backend API:** [API Endpoint](https://e-commerce-backend-iota-rouge.vercel.app/)
 
 ---
 
