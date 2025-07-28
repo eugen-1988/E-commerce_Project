@@ -1,8 +1,8 @@
 E-Commerce Custom Denim Jacket Platform
 
 🌐 Live Demo
-🛍️ Customer Storefront
-🛠️ Admin Panel
+- 🛍️ [Customer Storefront](https://e-commerce-frontend-beige-omega.vercel.app/)
+- 🛠️ [Admin Panel](https://e-commerce-admin-orpin-nine.vercel.app/orders)
 
 🛒 E-Commerce Fullstack App – Customer Shop + Admin Dashboard
 
