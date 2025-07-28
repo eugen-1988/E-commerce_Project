@@ -1,131 +1,139 @@
-# E-Commerce Custom Denim Jacket Platform
+E-Commerce Custom Denim Jacket Platform
 
-## 🧥 Customize Your Own Denim Jacket (EN)
+🌐 Live Demo
+🛍️ Customer Storefront
+🛠️ Admin Panel
 
-A full-stack e-commerce platform where users can explore, customize, and order personalized denim jackets. The application includes a complete customer shopping experience, a powerful admin dashboard, and a secure backend API.
+🛒 E-Commerce Fullstack App – Customer Shop + Admin Dashboard
 
-## 🧥 Gestalten Sie Ihre eigene Jeansjacke (DE)
+🔎 Overview
+This is a complete fullstack e-commerce web application that includes a modern shopping interface and a separate admin dashboard. Users can browse products, add items to cart, and checkout via Stripe. Admins can manage products, orders, and users in a separate panel with secure authentication.
 
-Eine Full-Stack-E-Commerce-Plattform, auf der Nutzer personalisierte Jeansjacken gestalten und bestellen können. Die Anwendung bietet ein vollständiges Einkaufserlebnis, ein Admin-Dashboard und ein sicheres Backend-API.
+🧠 What I Built & Learned
+- Built the entire stack: frontend, admin dashboard, and backend APIs
+- Implemented JWT-based authentication for admin access
+- Integrated Stripe for secure checkout and Cloudinary for image hosting
+- Designed responsive UI using TailwindCSS
+- Deployed all services to Vercel with environment-based configuration
 
----
+✨ Key Features
 
-## 🔗 Live Demo Links
+🛍️ Frontend:
+- [x] Browse products and categories
+- [x] Add to cart and view cart items
+- [x] Stripe-based secure checkout
+- [x] Mobile-first responsive design
+- [x] Success/failure feedback with Toastify
 
-* **Frontend:** [Live Store](https://e-commerce-frontend-beige-omega.vercel.app/)
-* **Admin Panel:** [Admin Dashboard](https://e-commerce-admin-orpin-nine.vercel.app/orders)
-* **Backend API:** [API Endpoint](https://e-commerce-backend-iota-rouge.vercel.app/)
+🧑‍💼 Admin Panel:
+- [x] Login with protected routes (JWT)
+- [x] View/manage orders, products, users
+- [x] Update status of orders
+- [x] Upload product images via Cloudinary
+- [x] Clean and minimalist dashboard UI
 
----
+🛠️ Backend:
+- Node.js + Express REST API
+- MongoDB + Mongoose models
+- Stripe payment integration
+- Image upload with Multer + Cloudinary
+- Authentication with JWT
 
-## 🚀 Features / Funktionen
+🧪 Admin Test Access
+🔐 [Go to Admin Panel](https://e-commerce-admin-orpin-nine.vercel.app/orders)  
+Email: `admin@marcal.com`  
+Password: `marcal_069853770e`
 
-### 👤 Customer Side (EN):
+## 🛠️ Tech Stack
 
-* Browse denim jacket collections
-* Customize jackets using a drag-and-drop design tool (Fabric.js)
-* Add to cart, place order, and view related products
-* Login, authentication & checkout (Stripe)
-* Responsive UI with modern TailwindCSS design
+| Layer     | Technologies |
+|-----------|--------------|
+| Frontend  | React 19, Vite, TailwindCSS, Axios, React Toastify |
+| Admin     | React 19, Axios, JWT, Cloudinary |
+| Backend   | Node.js, Express, MongoDB, Mongoose, Stripe, JWT |
+| Other     | Cloudinary, Multer, dotenv, Vercel (deploy) |
 
-### 👤 Kundenseite (DE):
+🔧 Local Setup
 
-* Durchsuchen Sie die Kollektionen
-* Individualisieren Sie Ihre Jacke mit einem Drag-and-Drop-Tool
-* Warenkorb, Bestellung, verwandte Produkte
-* Anmeldung, Authentifizierung und Stripe-Zahlung
-* Responsives UI mit modernem TailwindCSS-Design
+```bash
+git clone https://github.com/YOUR-USERNAME/e-commerce-project.git
+cd frontend
+npm install
+npm run dev
 
-### 🛠 Admin Panel (EN):
+cd ../admin
+npm install
+npm run dev
 
-* Add & manage products
-* View and manage orders
-* Authentication for admin access only
-* React + Tailwind, simple dashboard layout
+cd ../Backend
+npm install
+npm start
 
-### 🛠 Adminbereich (DE):
 
-* Produkte hinzufügen und verwalten
-* Bestellungen überblicken und bearbeiten
-* Admin-Login gesichert
-* Reaktives und klares Dashboard
+🛒 E-Commerce Fullstack App – Kundenshop + Admin Dashboard
 
----
+🔎 Überblick
+Dies ist eine vollständige E-Commerce-Webanwendung mit einem modernen Kundenshop und einem separaten Admin-Panel. Nutzer können Produkte durchstöbern, in den Warenkorb legen und über Stripe sicher bezahlen. Admins verwalten Bestellungen, Produkte und Nutzer über ein geschütztes Dashboard mit Login.
 
-## 🧰 Tech Stack
+🧠 Was ich entwickelt & gelernt habe
+- Komplette Architektur: Frontend, Adminbereich und Backend-API
+- Authentifizierung über JWT im Adminbereich
+- Stripe-Integration für sichere Zahlungen
+- Bilder-Upload über Cloudinary mit Multer
+- Responsive UI mit TailwindCSS gestaltet und optimiert
 
-### Frontend:
+✨ Hauptfunktionen
 
-* React 19 + Vite
-* TailwindCSS
-* React Router DOM
-* Axios, React Toastify
-* Fabric.js for customizing tool
+🛍️ Frontend:
+- [x] Produkte durchstöbern und filtern
+- [x] Warenkorb-Funktionalität
+- [x] Checkout über Stripe
+- [x] Responsive Design
+- [x] Feedback über Toastify-Benachrichtigungen
 
-### Admin Panel:
+🧑‍💼 Admin Panel:
+- [x] Login mit JWT-Schutz
+- [x] Bestellungen, Produkte und Nutzer verwalten
+- [x] Bestellstatus ändern
+- [x] Produktbilder via Cloudinary hochladen
+- [x] Klare, minimalistische Dashboard-Oberfläche
 
-* React + TailwindCSS
-* React Router
-* Axios + Toast notifications
+🛠️ Backend:
+- REST API mit Node.js + Express
+- MongoDB mit Mongoose
+- Stripe-Zahlungsintegration
+- Multer + Cloudinary für Bildverwaltung
+- Authentifizierung mit JWT
 
-### Backend:
+🧪 Admin-Zugang (Test)
+🔐 [Admin-Panel öffnen](https://e-commerce-admin-orpin-nine.vercel.app/orders)  
+E-Mail: `admin@marcal.com`  
+Passwort: `marcal_069853770e`
 
-* Node.js + Express.js
-* MongoDB + Mongoose
-* JWT Auth (Login/Register)
-* Stripe (Payments)
-* Cloudinary (Image upload)
-* Multer (file handling)
+🛠️ Tech Stack
 
----
+| Schicht     | Technologien |
+|-------------|--------------|
+| Frontend    | React 19, Vite, TailwindCSS, Axios, React Toastify |
+| Admin       | React 19, Axios, JWT, Cloudinary |
+| Backend     | Node.js, Express, MongoDB, Mongoose, Stripe |
+| Weitere     | Multer, dotenv, Vercel (Deployment) |
 
-## 📁 Folder Structure
+🔧 Lokale Installation
 
-```
-E-commerce_Project/
-├── frontend/     # User-facing store (React + Vite)
-├── admin/        # Admin dashboard (React)
-└── backend/      # API and database (Node + MongoDB)
-```
+```bash
+git clone https://github.com/DEIN-USERNAME/e-commerce-project.git
+cd frontend
+npm install
+npm run dev
 
----
+cd ../admin
+npm install
+npm run dev
 
-## ⚙️ Local Setup (EN)
+cd ../Backend
+npm install
+npm start
 
-1. Clone the repo: `git clone https://github.com/eugen-1988/E-commerce_Project`
-2. Install dependencies in each folder:
-
-   * `cd frontend && npm install`
-   * `cd ../admin && npm install`
-   * `cd ../backend && npm install`
-3. Configure environment variables in each `.env` file (example keys provided)
-4. Run all three:
-
-   * `npm run dev` (frontend & admin)
-   * `npm run server` (backend)
-
----
-
-## ⚙️ Lokale Einrichtung (DE)
-
-1. Repository klonen: `git clone https://github.com/eugen-1988/E-commerce_Project`
-2. Abhängigkeiten in jedem Ordner installieren:
-
-   * `cd frontend && npm install`
-   * `cd ../admin && npm install`
-   * `cd ../backend && npm install`
-3. Umgebungsvariablen in `.env` Dateien setzen
-4. Starte alle drei Instanzen:
-
-   * `npm run dev` (frontend & admin)
-   * `npm run server` (backend)
-
----
-
-## 📬 Contact / Kontakt
-
-For any questions, feel free to reach out via GitHub Issues or email.
-
----
 
 > Built with ❤️ by Eugen — Full-stack Developer & UX/UI Enthusiast
